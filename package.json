@@ -1,0 +1,17 @@
+{
+  "name": "discrodmodbot",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sinaee osko(kyoto2225)",
+  "license": "ISC",
+  "dependencies": {
+    "commandkit": "^0.1.10",
+    "discord.js": "^14.12.1",
+    "dotenv": "^16.3.1",
+    "nodemon": "^3.0.1"
+  }
+}

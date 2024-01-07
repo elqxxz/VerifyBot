@@ -18,8 +18,6 @@ const data = {
 /** @param {import('commandkit').SlashCommandProps} param0 */
 async function run ({interaction, client}){
   if(!interaction.isChatInputCommand()) return;
-
-  if (!interaction.member.roles.cache.some((role) => role.id === "1136984503886303253")) return;
     
   const interTargetID = interaction.options.get('user').value;
   const interUser = interaction.guild.members.cache.get(interTargetID);
@@ -102,7 +100,7 @@ async function run ({interaction, client}){
     if(interUser.roles.cache.has(UnverifiedRole) && interaction.values[0] === GirlRole) {
       interUser.roles.remove(UnverifiedRole);
       interUser.roles.add(GirlRole);
-      interaction.reply({ embeds: [SuccessEmbed] });
+      interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
     };
     if (!interaction.values[0] === GirlRole || !interaction.values[0] === BoyRole) {
       interaction.reply({ embeds: [ErrorEmbed], ephemeral: true })

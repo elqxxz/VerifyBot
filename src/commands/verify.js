@@ -40,8 +40,13 @@ async function run ({interaction, client}){
     .setDescription('Role has been changed!')
     .setColor(3447003);
   
-  const ErrorEmbed = new EmbedBuilder()
-    .setTitle("verification")
+  const WrongRoleEmbed = new EmbedBuilder()
+    .setTitle("ERROR")
+    .setDescription('Wrong role selected!')
+    .setColor(15548997);
+
+  const NoRolesSelectedEmbed = new EmbedBuilder()
+    .setTitle("ERROR")
     .setDescription('no roles selected!')
     .setColor(15548997);
 
@@ -65,45 +70,54 @@ async function run ({interaction, client}){
 
   collector.on("collect", (interaction) => {
     if (!interaction.values.length) {
-      interaction.reply({ embeds: [ErrorEmbed], ephemeral: true });
+      interaction.reply({ embeds: [NoRolesSelectedEmbed], ephemeral: true });
     };
 
     const UnverifiedRole = process.env.UNVERIFIED_ROLE_ID;
     const BoyRole = process.env.BOY_ROLE_ID;
     const GirlRole = process.env.GIRL_ROLE_ID;
 
-    if(interUser.roles.cache.has(BoyRole) && interaction.values[0] === BoyRole) {
-      interUser.roles.remove(BoyRole);
-      interUser.roles.add(UnverifiedRole);
-      interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
+    switch (interUser.roles.cache.has(BoyRole) && interaction.values[0]){
+      case BoyRole:
+        interUser.roles.remove(BoyRole);
+        interUser.roles.add(UnverifiedRole);
+        interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
+      break;
+      case GirlRole:
+        interUser.roles.remove(BoyRole);
+        interUser.roles.add(GirlRole);
+        interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
+      break;
     };
-    if(interUser.roles.cache.has(GirlRole) && interaction.values[0] === GirlRole) {
-      interUser.roles.remove(GirlRole);
-      interUser.roles.add(UnverifiedRole);
-      interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
+
+    switch (interUser.roles.cache.has(GirlRole) && interaction.values[0]) {
+      case BoyRole:
+        interUser.roles.remove(GirlRole);
+        interUser.roles.add(BoyRole);
+        interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
+      break;
+      case GirlRole:
+        interUser.roles.remove(GirlRole);
+        interUser.roles.add(UnverifiedRole);
+        interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
+      break;
     };
-    if(interUser.roles.cache.has(BoyRole) && interaction.values[0] === GirlRole) {
-      interUser.roles.remove(BoyRole);
-      interUser.roles.add(GirlRole);
-      interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
+
+    switch (interUser.roles.cache.has(UnverifiedRole) && interaction.values[0]) {
+      case BoyRole:
+        interUser.roles.remove(UnverifiedRole);
+        interUser.roles.add(BoyRole);
+        interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+      break;
+      case GirlRole:
+        interUser.roles.remove(UnverifiedRole);
+        interUser.roles.add(GirlRole);
+        interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+      break;
     };
-    if(interUser.roles.cache.has(GirlRole) && interaction.values[0] === BoyRole) {
-      interUser.roles.remove(GirlRole);
-      interUser.roles.add(BoyRole);
-      interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
-    };
-    if(interUser.roles.cache.has(UnverifiedRole) && interaction.values[0] === BoyRole) {
-      interUser.roles.remove(UnverifiedRole);
-      interUser.roles.add(BoyRole);
-      interaction.reply({ embeds: [SuccessEmbed] });
-    };
-    if(interUser.roles.cache.has(UnverifiedRole) && interaction.values[0] === GirlRole) {
-      interUser.roles.remove(UnverifiedRole);
-      interUser.roles.add(GirlRole);
-      interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
-    };
+
     if (!interaction.values[0] === GirlRole || !interaction.values[0] === BoyRole) {
-      interaction.reply({ embeds: [ErrorEmbed], ephemeral: true })
+      interaction.reply({ embeds: [WrongRoleEmbed], ephemeral: true })
     };
   });
 };
